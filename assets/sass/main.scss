@@ -8,12 +8,11 @@
 }
 
 @mixin small-items{
-    display:inline
+    display:inline-block
    
 }
 
   
-
 .card-items{
     @include card-items()
 }

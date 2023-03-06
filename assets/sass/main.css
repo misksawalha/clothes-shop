@@ -1,3 +1,4 @@
+
 .card-items {
   border: 1px black solid;
   display: inline-block;
@@ -9,11 +10,19 @@
 }
 
 .small-items {
-  display: inline;
+  display: inline-block;
 }/*# sourceMappingURL=main.css.map */
 
-@media screen and (max-width: 800px) {
+
+@media only screen and (max-width: 600px) {
   .small-items {
+ 
     display: inline-block;
+  }
+}
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+  .small-items {
+    display: inline;
   }
 }
