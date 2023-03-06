@@ -1,7 +1,9 @@
 
 let card = document.getElementById('card');
 let width;
+
 let buttonName="";
+let myButtonName=""
 let value;
 let j=0;
 let itr="";
@@ -245,145 +247,71 @@ let products = {
 
 
 
-displayData(key,1024);
+displayData(key,1024,flag);
 $(window).resize(function() {
     width=window.innerWidth
   //  console.log('window was resized');
-    displayData(key,width);
+    displayData(key,width,flag);
    // //console.log(window.innerWidth);
   });
-  function displayData(key,width){
-    if(width>=600){
-        buttonName="Less";
-    }
-    else{
-        buttonName="More"
-    }
-     console.log(key)
+  function displayData(key, width, flag) {
+    let buttonName = flag == 0 ? "Less" : "More";
+    console.log(key);
     let res = ``;
     let len = products.results.length;
-   
-
-    for( i = 0 ; i < len ; i++){
+    for (i = 0; i < len; i++) {
         let swatchRes = ``;
         let lent = products.results[i].swatches.length;
-        for( j = 0 ; j < 5 ; j++){
+        for (j = 0; j < 5; j++) {
             swatchRes += `
-            <div class="small-items">
+                <div class="small-items">
                     <img src=${products.results[i].swatches[j].img.src}>
-            </div>
+                </div>
             `;
         }
-        if(key==i && width<600)//more
-        { 
-            console.log("show more "+ key)
-            for( j = 0 ; j < lent ; j++){
+        if (key == i && flag == 0) { //more
+            for (j = 0; j < lent; j++) {
                 swatchRes += `
-                <div class="small-items">
+                    <div class="small-items">
                         <img src=${products.results[i].swatches[j].img.src}>
-                </div>
+                    </div>
                 `;
             }
         }
-        if(key==i && width>=600){
+        if (key == i && flag == 1) {
             swatchRes = ``;
-            console.log("show less "+ key)
-            for( j = 0 ; j < 3 ; j++){
-                console.log("j"+j)
+            buttonName="More"
+            for (j = 0; j < 3; j++) {
+                console.log("j" + j);
                 swatchRes += `
-                <div class="small-items">
+                    <div class="small-items">
                         <img src=${products.results[i].swatches[j].img.src}>
-                </div>
+                    </div>
                 `;
             }
         }
-        // else{
-        //     console.log("normal "+ key)
-        //     for( j = 0 ; j < 5 ; j++){
-        //         swatchRes += `
-        //         <div class="small-items">
-        //                 <img src=${products.results[i].swatches[j].img.src}>
-        //         </div>
-        //         `;
-        //     }
-        // }
-        res+=`
-        <div class="card-items">
-            <img class="image" src=${products.results[i].productImg}>
-            
-            <div class="small-items">
-            <p>${products.results[i].productName}</p>
-                ${swatchRes}
-                <button onclick="toggle(${i},${j},${width})" id="textButton">
-                ${buttonName}
-                </button>
-                <p>${products.results[i].productPrice}$</p>
-            <p>${products.results[i].productPriceFormatted}</p>
+        res += `
+            <div class="card-items">
+                <img class="image" src=${products.results[i].productImg}>
+                <div class="small-items">
+                    <p>${products.results[i].productName}</p>
+                    ${swatchRes}
+                    <button onclick="toggle(${i},${width},${flag})" id="textButton${i}">
+                        ${buttonName}
+                    </button>
+                    <p>${products.results[i].productPrice}$</p>
+                    <p>${products.results[i].productPriceFormatted}</p>
+                </div>
             </div>
-           
-        </div>
-        `
+        `;
     }
+
     card.innerHTML = res;
 }
 
-function toggle(i,j,width){
-    key = i
-   //console.log(flag)
-   //console.log(width)
-
-   displayData(key,width)
-    // //console.log("i "+i)
-    // //console.log("value "+value)
-    // if(value>0){
-    //     //console.log(width)
- 
-    //     let res = ``;
-    //     let len = products.results.length;
-        
-    //     for(i = 0 ; i < len ; i++){
-    //         let swatchRes = ``;
-    //         let lent = products.results[i].swatches.length;
-    //         //console.log("lent: "+lent)
-    //         if(lent <5 && width <600 ){
-    //             let buttonName="";
-    //             for( j = 0 ; j < lent ; j++){
-    //                 swatchRes += `
-    //                 <div class="small-items">
-    //                         <img src=${products.results[i].swatches[j].img.src}>
-    //                 </div>
-    //                 `;
-    //             }
-    //         }
-    //         else if(lent >=5 && width<600){
-    //             buttonName = "more"
-    //             for( j = 0 ; j < lent ; j++){
-                    
-    //                 swatchRes += `
-    //                 <div class="small-items">
-    //                         <img src=${products.results[i].swatches[j].img.src}>
-    //                 </div>
-    //                 `;
-    //             }
-    //         }
-    //         res+=`
-    //         <div class="card-items">
-    //             <img class="image" src=${products.results[i].productImg}>
-                
-    //             <div class="small-items">
-    //             <p>${products.results[i].productName}</p>
-    //                 ${swatchRes}
-    //                 <button onclick="toggle(${i},${value})" id="textButton">
-    //                 ${buttonName}
-    //                 </button>
-    //                 <p>${products.results[i].productPrice}$</p>
-    //             <p>${products.results[i].productPriceFormatted}</p>
-    //             </div>
-               
-    //         </div>
-    //         `
-    //     }
-    //     card.innerHTML = res;
-    // }
-
+function toggle(i, width, flag) {
+    flag = !flag;
+    let buttonElem = document.getElementById(`textButton${i}`);
+    buttonElem.textContent = flag == 0 ? "Less" : "More";
+    displayData(i, width, flag);
 }
