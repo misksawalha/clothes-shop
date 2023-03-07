@@ -3,10 +3,13 @@
   border: 1px black solid;
   display: inline-block;
   border-radius: 5px;
+  
 }
 
 .image {
   border-radius: 5px;
+  margin-bottom: 0;
+  position: static;
 }
 
 .small-items {
@@ -16,8 +19,10 @@
 
 @media only screen and (max-width: 600px) {
   .small-items {
- 
     display: inline-block;
+  }
+  .image{
+    height: 50%;
   }
 }
 

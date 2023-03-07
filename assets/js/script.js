@@ -1,7 +1,7 @@
 
 let card = document.getElementById('card');
 let width;
-
+let res = ``;
 let buttonName="";
 let myButtonName=""
 let value;
@@ -254,64 +254,73 @@ $(window).resize(function() {
     displayData(key,width,flag);
    // //console.log(window.innerWidth);
   });
-  function displayData(key, width, flag) {
-    let buttonName = flag == 0 ? "Less" : "More";
-    console.log(key);
-    let res = ``;
+  function displayData() {
+    let res = '';
     let len = products.results.length;
-    for (i = 0; i < len; i++) {
-        let swatchRes = ``;
-        let lent = products.results[i].swatches.length;
-        for (j = 0; j < 5; j++) {
-            swatchRes += `
-                <div class="small-items">
-                    <img src=${products.results[i].swatches[j].img.src}>
-                </div>
-            `;
-        }
-        if (key == i && flag == 0) { //more
-            for (j = 0; j < lent; j++) {
-                swatchRes += `
-                    <div class="small-items">
-                        <img src=${products.results[i].swatches[j].img.src}>
-                    </div>
-                `;
-            }
-        }
-        if (key == i && flag == 1) {
-            swatchRes = ``;
-            buttonName="More"
-            for (j = 0; j < 3; j++) {
-                console.log("j" + j);
-                swatchRes += `
-                    <div class="small-items">
-                        <img src=${products.results[i].swatches[j].img.src}>
-                    </div>
-                `;
-            }
-        }
-        res += `
-            <div class="card-items">
-                <img class="image" src=${products.results[i].productImg}>
-                <div class="small-items">
-                    <p>${products.results[i].productName}</p>
-                    ${swatchRes}
-                    <button onclick="toggle(${i},${width},${flag})" id="textButton${i}">
-                        ${buttonName}
-                    </button>
-                    <p>${products.results[i].productPrice}$</p>
-                    <p>${products.results[i].productPriceFormatted}</p>
-                </div>
-            </div>
+    for (let i = 0; i < len; i++) {
+      let swatchRes = '';
+      let swatchLen = products.results[i].swatches.length;
+      for (let j = 0; j < 5; j++) {
+        swatchRes += `
+          <div class="small-items">
+            <img src=${products.results[i].swatches[j].img.src}>
+          </div>
         `;
+      }
+      res += `
+        <div class="card-items" id="cardItem${i}">
+          <img class="image" src=${products.results[i].productImg}>
+          <div class="small-items">
+            <p>${products.results[i].productName}</p>
+            <div class="swatches">
+              ${swatchRes}
+            </div>
+            <button onclick="toggle(${i})">More</button>
+            <p>${products.results[i].productPrice}$</p>
+            <p>${products.results[i].productPriceFormatted}</p>
+          </div>
+        </div>
+      `;
     }
-
     card.innerHTML = res;
-}
-
-function toggle(i, width, flag) {
-    flag = !flag;
-    let buttonElem = document.getElementById(`textButton${i}`);
-    buttonElem.textContent = flag == 0 ? "Less" : "More";
-    displayData(i, width, flag);
-}
+  }
+  
+  function toggle(key) {
+    const cardItem = document.getElementById(`cardItem${key}`);
+    const button = cardItem.querySelector('button');
+    const swatchesContainer = cardItem.querySelector('.swatches');
+  
+    if (button.innerText === 'More') {
+      const product = products.results[key]; // get the correct product
+      let swatchRes = '';
+  
+      // generate HTML for all swatches of the product
+      for (let j = 0; j < product.swatches.length; j++) {
+        const imgSrc = product.swatches[j].img.src;
+        swatchRes += `
+          <div class="small-items">
+            <img src="${imgSrc}">
+          </div>
+        `;
+      }
+  
+      // update swatches with generated HTML and change button text
+      swatchesContainer.innerHTML = swatchRes;
+      button.innerText = 'Less';
+    } else {
+      // reset swatches to show only 5 swatches and change button text
+      const product = products.results[key];
+      let swatchRes = '';
+      for (let j = 0; j < 5; j++) {
+        const imgSrc = product.swatches[j].img.src;
+        swatchRes += `
+          <div class="small-items">
+            <img src="${imgSrc}">
+          </div>
+        `;
+      }
+      swatchesContainer.innerHTML = swatchRes;
+      button.innerText = 'More';
+    }
+  }
+  
