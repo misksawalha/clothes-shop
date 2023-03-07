@@ -11,7 +11,9 @@
   margin-bottom: 0;
   position: static;
 }
-
+.hide{
+  visibility:hidden
+}
 .small-items {
   display: inline-block;
 }/*# sourceMappingURL=main.css.map */

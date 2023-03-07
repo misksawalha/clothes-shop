@@ -247,41 +247,73 @@ let products = {
 
 
 
-displayData(key,1024,flag);
+displayData();
 $(window).resize(function() {
     width=window.innerWidth
   //  console.log('window was resized');
-    displayData(key,width,flag);
+    displayData();
    // //console.log(window.innerWidth);
   });
   function displayData() {
+    
     let res = '';
     let len = products.results.length;
     for (let i = 0; i < len; i++) {
-      let swatchRes = '';
-      let swatchLen = products.results[i].swatches.length;
-      for (let j = 0; j < 5; j++) {
-        swatchRes += `
-          <div class="small-items">
-            <img src=${products.results[i].swatches[j].img.src}>
-          </div>
-        `;
-      }
-      res += `
-        <div class="card-items" id="cardItem${i}">
-          <img class="image" src=${products.results[i].productImg}>
-          <div class="small-items">
-            <p>${products.results[i].productName}</p>
-            <div class="swatches">
-              ${swatchRes}
-            </div>
-            <button onclick="toggle(${i})">More</button>
-            <p>${products.results[i].productPrice}$</p>
-            <p>${products.results[i].productPriceFormatted}</p>
-          </div>
-        </div>
-      `;
+         let swatchRes = '';
+        let swatchLen = products.results[i].swatches.length;
+        if(products.results[i].swatches.length <= 5 ){
+            for (let j = 0; j < 5; j++) {
+                swatchRes += `
+                  <div class="small-items">
+                    <img src=${products.results[i].swatches[j].img.src}>
+                  </div>
+                `;
+              }
+              res += `
+                <div class="card-items" id="cardItem${i}">
+                  <img class="image" src=${products.results[i].productImg}>
+                  <div class="small-items">
+                    <p>${products.results[i].productName}</p>
+                    <div class="swatches">
+                      ${swatchRes}
+                    </div>
+                    <div>
+                    <button  class="hide" onclick="toggle(${i})"> </button>
+                    </div>
+                    
+                    <p>${products.results[i].productPrice}$</p>
+                    <p>${products.results[i].productPriceFormatted}</p>
+                  </div>
+                </div>
+              `;
+        }
+        else{
+            for (let j = 0; j < 5; j++) {
+                swatchRes += `
+                  <div class="small-items">
+                    <img src=${products.results[i].swatches[j].img.src}>
+                  </div>
+                `;
+              }
+              res += `
+                <div class="card-items" id="cardItem${i}">
+                  <img class="image" src=${products.results[i].productImg}>
+                  <div class="small-items">
+                    <p>${products.results[i].productName}</p>
+                    <div class="swatches">
+                      ${swatchRes}
+                    </div>
+                    <button  onclick="toggle(${i})">More</button>
+                    <p>${products.results[i].productPrice}$</p>
+                    <p>${products.results[i].productPriceFormatted}</p>
+                  </div>
+                </div>
+              `;
+        }
+      
     }
+
+    
     card.innerHTML = res;
   }
   
@@ -289,9 +321,14 @@ $(window).resize(function() {
     const cardItem = document.getElementById(`cardItem${key}`);
     const button = cardItem.querySelector('button');
     const swatchesContainer = cardItem.querySelector('.swatches');
-  
+    const product = products.results[key]
+    console.log(products.results[key].swatches.length)
+    if(products.results[key].swatches.length <= 5 ){
+        button.classList.add('hide');
+      //  button.setAttribute('hide')
+    }
     if (button.innerText === 'More') {
-      const product = products.results[key]; // get the correct product
+      ; // get the correct product
       let swatchRes = '';
   
       // generate HTML for all swatches of the product
@@ -306,10 +343,10 @@ $(window).resize(function() {
   
       // update swatches with generated HTML and change button text
       swatchesContainer.innerHTML = swatchRes;
-      button.innerText = 'Less';
+      button.innerHTML = 'Less';
     } else {
       // reset swatches to show only 5 swatches and change button text
-      const product = products.results[key];
+   //   const product = products.results[key];
       let swatchRes = '';
       for (let j = 0; j < 5; j++) {
         const imgSrc = product.swatches[j].img.src;
@@ -320,7 +357,7 @@ $(window).resize(function() {
         `;
       }
       swatchesContainer.innerHTML = swatchRes;
-      button.innerText = 'More';
+      button.innerHTML = 'More';
     }
   }
   
